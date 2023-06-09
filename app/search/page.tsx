@@ -2,7 +2,7 @@ import Header from "./components/Header"
 import SearchSideBar from "./components/SearchSideBar"
 import RestaurantCard from "./components/RestaurantCard"
 import { prisma } from "@/pages/api/db"
-import { PRICE } from "@prisma/client"
+import { PRICE, Cuisine, Location } from "@prisma/client"
 
 export interface Restaurant {
   id: number;
@@ -45,7 +45,20 @@ const fetchRestaurantByLocation = (location: string | undefined): Promise<Restau
   })
 }
 
-export default async function Search({searchParams}: {searchParams: { city: string}}) {
+const fetchLocations = (): Promise<Location> => {
+  return prisma.location.findMany({})
+}
+
+const fetchCuisines = (): Promise<Cuisine> => {
+  return prisma.cuisine.findMany({})
+}
+
+export default async function Search({searchParams}: {searchParams: { 
+  city?: string, cuisine?: string, price?: PRICE 
+}}) {
+
+  const locations = await fetchLocations()
+  const cuisines = await fetchCuisines()
 
   const restaurants = await fetchRestaurantByLocation(searchParams?.city)
 
@@ -53,7 +66,7 @@ export default async function Search({searchParams}: {searchParams: { city: stri
     <>
       <Header />
       <div className="flex py-4 m-auto w-2/3 justify-between items-start">
-        <SearchSideBar/>
+        <SearchSideBar locations={locations} cuisines={cuisines} searchParams={searchParams} />
         <div className="w-5/6">
           {
             restaurants.length > 1 ? 
