@@ -2,9 +2,24 @@ import Header from "./components/Header"
 import SearchSideBar from "./components/SearchSideBar"
 import RestaurantCard from "./components/RestaurantCard"
 import { prisma } from "@/pages/api/db"
-import { Restaurant } from "@prisma/client"
 
-const fetchRestaurantByLocation = (location: string | undefined): Promise<Restaurant> => {
+export interface Restaurant {
+  id: number;
+  slug: string;
+  name: string;
+  main_image: string;
+  price: string;
+  cuisine: {
+    id: number;
+    name: string;
+  },
+  location: {
+    id: number;
+    name: string;
+  }
+}
+
+const fetchRestaurantByLocation = (location: string | undefined): Promise<Restaurant[]> => {
   const select = {
     id: true,
     slug: true,
@@ -41,10 +56,10 @@ export default async function Search({searchParams}: {searchParams: { city: stri
         <div className="w-5/6">
           {
             restaurants.length > 1 ? 
-              restaurants.map(restaurant => (
+              restaurants.map((restaurant: Restaurant) => (
                 <RestaurantCard key={restaurant.id} props={restaurant} />
               ))  :
-              <p className="text-red-500">Sorry, there's no restaurant can be found for {searchParams.city} area</p>
+              <p className="text-red-500">Sorry, no restaurant can be found at {searchParams.city} area</p>
           }
         </div>
       </div>
