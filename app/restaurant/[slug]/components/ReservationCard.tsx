@@ -1,5 +1,7 @@
 "use client"
 
+import Link from "next/link"
+
 export default function ReservationCard() {
   return (
     <div className="fixed w-[15%] bg-white rounded p-3 shadow">
@@ -29,7 +31,9 @@ export default function ReservationCard() {
         </div>
       </div>
       <div className="mt-5">
-        <button className="bg-red-600 w-full text-white border p-1 px-4 rounded mr-3 font-bold h-16">Find a Time</button>
+        <Link href="/reserve/milestones-grill">
+          <button className="bg-red-600 w-full text-white border p-1 px-4 rounded mr-3 font-bold h-16">Find a Time</button>
+        </Link>
       </div>
     </div>
   )
