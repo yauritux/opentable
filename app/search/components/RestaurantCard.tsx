@@ -14,7 +14,7 @@ export default function RestaurantCard({restaurant} : {restaurant: Restaurant}) 
           </div>
           <div className="mb-9">
             <div className="font-light flex text-reg">
-              <p className="mr-4"><Price price={restaurant.price} /></p>
+              <Price price={restaurant.price} />
               <p className="mr-4">{restaurant?.cuisine?.name}</p>
               <p className="mr-4">{restaurant?.location?.name}</p>
             </div>
