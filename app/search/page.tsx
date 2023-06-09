@@ -2,13 +2,14 @@ import Header from "./components/Header"
 import SearchSideBar from "./components/SearchSideBar"
 import RestaurantCard from "./components/RestaurantCard"
 import { prisma } from "@/pages/api/db"
+import { PRICE } from "@prisma/client"
 
 export interface Restaurant {
   id: number;
   slug: string;
   name: string;
   main_image: string;
-  price: string;
+  price: PRICE;
   cuisine: {
     id: number;
     name: string;
@@ -57,7 +58,7 @@ export default async function Search({searchParams}: {searchParams: { city: stri
           {
             restaurants.length > 1 ? 
               restaurants.map((restaurant: Restaurant) => (
-                <RestaurantCard key={restaurant.id} props={restaurant} />
+                <RestaurantCard key={restaurant.id} restaurant={restaurant} />
               ))  :
               <p className="text-red-500">Sorry, no restaurant can be found at {searchParams.city} area</p>
           }
