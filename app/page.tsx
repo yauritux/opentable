@@ -1,8 +1,7 @@
-import { PrismaClient, Cuisine, Location, PRICE } from '@prisma/client'
+import { Cuisine, Location, PRICE } from '@prisma/client'
+import { prisma } from '@/pages/api/db';
 import Header from './components/Header'
 import RestaurantCard from './components/RestaurantCard'
-
-const prisma = new PrismaClient()
 
 export interface RestaurantCardType {
   id: number;

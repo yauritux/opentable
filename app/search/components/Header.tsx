@@ -1,4 +1,4 @@
-import SearchBar from "@/app/components/SearchBar";
+import SearchBar from "@/app/components/SearchBar"
 
 export default function Header() {
   return (
