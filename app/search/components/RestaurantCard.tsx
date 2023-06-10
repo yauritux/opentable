@@ -1,8 +1,19 @@
 import Link from 'next/link'
 import Price from '@/app/components/Price'
 import { Restaurant } from '../page'
+import { calculateReviewRating } from '@/utils/calculateReviewRating'
 
 export default function RestaurantCard({restaurant} : {restaurant: Restaurant}) {
+
+  const renderRatingText = () => {
+    const rating = calculateReviewRating(restaurant.reviews)
+
+    if (rating > 4) return "Awesome"
+    else if (rating <= 4 && rating > 3) return "Good"
+    else if (rating <= 3 && rating > 0) return "Average"
+    else ""
+  }
+
   return (
     <div className="border-b flex pb-5 ml-5">      
         <img src={restaurant?.main_image} alt="" className="w-44 h-36 rounded" />
@@ -10,7 +21,7 @@ export default function RestaurantCard({restaurant} : {restaurant: Restaurant}) 
           <h2 className="text-3xl">{restaurant?.name}</h2>
           <div className="flex items-start">
             <div className="flex mb-2">*****</div>
-            <p className="ml-2 text-sm">Awesome</p>
+            <p className="ml-2 text-sm">{renderRatingText()}</p>
           </div>
           <div className="mb-9">
             <div className="font-light flex text-reg">

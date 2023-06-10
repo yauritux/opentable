@@ -2,7 +2,7 @@ import Header from "./components/Header"
 import SearchSideBar from "./components/SearchSideBar"
 import RestaurantCard from "./components/RestaurantCard"
 import { prisma } from "@/pages/api/db"
-import { PRICE, Cuisine, Location } from "@prisma/client"
+import { PRICE, Cuisine, Review, Location } from "@prisma/client"
 
 export interface Restaurant {
   id: number
@@ -18,6 +18,7 @@ export interface Restaurant {
     id: number
     name: string
   }
+  reviews: Review[]
 }
 
 interface SearchParams {
@@ -60,6 +61,7 @@ const fetchRestaurantByFilter = (searchParams: SearchParams): Promise<Restaurant
     cuisine: true,
     location: true,
     main_image: true,
+    reviews: true,
   }
 
   return prisma.restaurant.findMany({
