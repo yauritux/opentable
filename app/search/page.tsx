@@ -5,22 +5,53 @@ import { prisma } from "@/pages/api/db"
 import { PRICE, Cuisine, Location } from "@prisma/client"
 
 export interface Restaurant {
-  id: number;
-  slug: string;
-  name: string;
-  main_image: string;
-  price: PRICE;
+  id: number
+  slug: string
+  name: string
+  main_image: string
+  price: PRICE
   cuisine: {
-    id: number;
-    name: string;
+    id: number
+    name: string
   },
   location: {
-    id: number;
-    name: string;
+    id: number
+    name: string
   }
 }
 
-const fetchRestaurantByLocation = (location: string | undefined): Promise<Restaurant[]> => {
+interface SearchParams {
+  city?: string
+  cuisine?: string
+  price?: PRICE
+}
+
+const fetchRestaurantByFilter = (searchParams: SearchParams): Promise<Restaurant[]> => {
+  const where: any = {}
+
+  if (searchParams.city) {
+    const location = {
+      name: {
+        equals: searchParams.city.toLowerCase()
+      }
+    }
+    where.location = location
+  }
+  if (searchParams.cuisine) {
+    const cuisine = {
+      name: {
+        equals: searchParams.cuisine.toLowerCase()
+      }
+    }
+    where.cuisine = cuisine
+  }
+  if (searchParams.price) {
+    const price = {
+      equals: searchParams.price
+    }
+    where.price = price
+  }
+
   const select = {
     id: true,
     slug: true,
@@ -31,36 +62,26 @@ const fetchRestaurantByLocation = (location: string | undefined): Promise<Restau
     main_image: true,
   }
 
-  if (!location) return prisma.restaurant.findMany({select})
-
   return prisma.restaurant.findMany({
-    where: {
-      location: {
-        name: {
-          equals: location.toLowerCase()
-        }
-      }
-    },
+    where,
     select
   })
 }
 
-const fetchLocations = (): Promise<Location> => {
+const fetchLocations = (): Promise<Location[]> => {
   return prisma.location.findMany({})
 }
 
-const fetchCuisines = (): Promise<Cuisine> => {
+const fetchCuisines = (): Promise<Cuisine[]> => {
   return prisma.cuisine.findMany({})
 }
 
-export default async function Search({searchParams}: {searchParams: { 
-  city?: string, cuisine?: string, price?: PRICE 
-}}) {
+export default async function Search({searchParams}: {searchParams: SearchParams }) {
 
   const locations = await fetchLocations()
   const cuisines = await fetchCuisines()
 
-  const restaurants = await fetchRestaurantByLocation(searchParams?.city)
+  const restaurants = await fetchRestaurantByFilter(searchParams)
 
   return (
     <>

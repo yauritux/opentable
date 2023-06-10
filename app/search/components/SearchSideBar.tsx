@@ -49,7 +49,7 @@ export default async function SearchSideBar({locations, cuisines, searchParams}:
               ...searchParams,
               price: PRICE.REGULAR,
             }
-          }}className="border-r border-t border-b w-full text-reg font-light p-2">$$</Link>
+          }} className="border-r border-t border-b w-full text-reg font-light p-2">$$</Link>
           <Link href={{
             pathname: "/search",
             query: {
